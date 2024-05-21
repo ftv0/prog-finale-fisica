@@ -14,5 +14,6 @@ int main() {
     double c = dist2(engVel);
     double d = dist2(engVel);
 
+
     std::cout << a << ' ' <<  b  << ' ' << c << ' ' << d;
 }
