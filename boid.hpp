@@ -30,7 +30,7 @@ class Boid {
     ArrayD2 separationImpulse (SimPars const&) const;
     ArrayD2 allignmentImpulse (SimPars const&) const;
     ArrayD2 cohesionImpulse (SimPars const&) const;
-
+    ArrayD2 wallbounce(SimPars const&) const;
 
     void updatePosition ();
     void updateVelocity ();

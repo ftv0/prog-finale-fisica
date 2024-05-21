@@ -6,13 +6,13 @@
 
 using ArrayD2 = std::array<double, 2>;
 
-Boid::Boid () {
-    position[0] = (std::rand () / static_cast<double> (RAND_MAX)) * X_SPACE;
-    position[1] = (std::rand () / static_cast<double> (RAND_MAX)) * Y_SPACE;
-    velocity[0] = ((std::rand () / static_cast<double> (RAND_MAX)) - 0.5) * MAX_COMPONENT_SPEED;
-    velocity[1] = ((std::rand () / static_cast<double> (RAND_MAX)) - 0.5) * MAX_COMPONENT_SPEED;
-    impulse = { 0, 0 };
-}
+// Boid::Boid () {
+//     position[0] = (std::rand () / static_cast<double> (RAND_MAX)) * X_SPACE;
+//     position[1] = (std::rand () / static_cast<double> (RAND_MAX)) * Y_SPACE;
+//     velocity[0] = ((std::rand () / static_cast<double> (RAND_MAX)) - 0.5) * MAX_COMPONENT_SPEED;
+//     velocity[1] = ((std::rand () / static_cast<double> (RAND_MAX)) - 0.5) * MAX_COMPONENT_SPEED;
+//     impulse = { 0, 0 };
+// }
 
 ArrayD2 Boid::separationImpulse (SimPars const& pars) const {
     ArrayD2 sepImp = { 0, 0 };
@@ -50,6 +50,22 @@ ArrayD2 Boid::cohesionImpulse (SimPars const& pars) const {
     ArrayD2 averagePos = sumPos / static_cast<double> (size (nearBoids));
     return averagePos * pars.c;
 }
+
+ArrayD2 Boid::wallbounce (SimPars const& pars) const {
+    ArrayD2 Wcorrection{0., 0.};
+    if (position[0] > 99) {
+        //wall = ...
+        Wcorrection *= (100-position[0]);
+    }
+    if (position[0] < 1) {
+        //wall = ...
+        Wcorrection *= position[0];
+    }
+    if (position[1] > 99) {}
+    if (position[1] < 1) {}
+    return Wcorrection;
+}
+//sarebbe bello fare la spinta proporzionale alla distanza dal muro
 
 void Boid::updatePosition () {
     position += velocity;
@@ -90,7 +106,7 @@ void Boid::updateVelocity () {
 void Boid::updateImpulse (SimPars const& pars) {
 
     impulse = this->separationImpulse (pars) + this->allignmentImpulse (pars) +
-    this->cohesionImpulse (pars);
+    this->cohesionImpulse (pars) + this->wallbounce (pars);
 }
 
 ArrayD2 const& Boid::getPosition () const {
